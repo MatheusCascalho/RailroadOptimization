@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import numpy as np
-from optimizer.restrictions.restrictions import Restrictions, RestrictionType
+from optimizer.restrictions.restrictions import Restrictions, RestrictionType, Restriction
 
 
 def node_id_generator():
@@ -36,6 +36,29 @@ class CapacityRestrictions(Restrictions):
         self.__empty_origins = self.build_load_points(flows=flows)
         self.__loaded_origins = self.build_load_points(flows=flows)
         self.__loaded_destinations = self.build_unload_points(flows=flows)
+        self.__cardinality = (self.__trains, len(self.__empty_origins), len(self.__loaded_destinations))
+        self.__restrictions = self.__build_restrictions(flows=flows)
+
+    def __build_restrictions(self, flows):
+        restrictions = []
+        for j, origin in enumerate(self.__loaded_origins):
+            matrix = np.zeros(self.__cardinality)
+            filtered_flows = [flow for flow in flows if flow.origin == origin]
+            if filtered_flows:
+                coefficient = filtered_flows[0].train_volume
+                k = self.__empty_origins.index(filtered_flows[0].destination)
+                matrix[:, j, k] = coefficient
+                restriction = Restriction(
+                    coefficients=matrix,
+                    sense=self.restriction_type.value,
+                    resource=origin.capacity
+                )
+                restrictions.append(restriction)
+        return restrictions
+
+    @property
+    def restrictions(self) -> list[Restriction]:
+        return self.__restrictions
 
     @staticmethod
     def build_unload_points(flows: list[Flow]):
