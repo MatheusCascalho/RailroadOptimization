@@ -72,8 +72,16 @@ class CapacityRestrictions(Restrictions):
         nodes = sorted(nodes, key=lambda x: x.identifier)
         return nodes
 
+    @property
     def coefficients_matrix(self) -> np.ndarray:
-        pass
+        a = [r.coefficients for r in self.restrictions]
+        a = np.array(a)
+        return a
 
+    @property
     def restriction_type(self) -> RestrictionType:
-        pass
+        return RestrictionType.LESS_OR_EQUAL
+
+    @property
+    def cardinality(self):
+        return self.__cardinality

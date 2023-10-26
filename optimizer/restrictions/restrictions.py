@@ -25,6 +25,10 @@ class Restriction:
 
 
 class Restrictions(abc.ABC):
+    @abc.abstractmethod
+    @property
+    def restrictions(self):
+        pass
 
     @abc.abstractmethod
     @property
@@ -37,6 +41,11 @@ class Restrictions(abc.ABC):
         This method build constraint coefficients as a Matrix
         :return:
         """
+        pass
+
+    @abc.abstractmethod
+    @property
+    def cardinality(self):
         pass
 
 
