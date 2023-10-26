@@ -4,7 +4,7 @@ railroad optimization problem - ROP
 
 """
 
-import abc
+from abc import abstractmethod, ABC
 import numpy as np
 from dataclasses import dataclass
 from enum import Enum
@@ -24,18 +24,16 @@ class Restriction:
     resource: float
 
 
-class Restrictions(abc.ABC):
-    @abc.abstractmethod
-    @property
+class Restrictions(ABC):
+    @abstractmethod
     def restrictions(self):
         pass
 
-    @abc.abstractmethod
-    @property
+    @abstractmethod
     def restriction_type(self) -> RestrictionType:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def coefficients_matrix(self) -> np.ndarray:
         """
         This method build constraint coefficients as a Matrix
@@ -43,8 +41,7 @@ class Restrictions(abc.ABC):
         """
         pass
 
-    @abc.abstractmethod
-    @property
+    @abstractmethod
     def cardinality(self):
         pass
 
