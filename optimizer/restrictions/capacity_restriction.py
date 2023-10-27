@@ -56,6 +56,7 @@ class CapacityRestrictions(Restrictions):
                     resource=origin.capacity
                 )
                 restrictions.append(restriction)
+                v = restriction.to_vector()
         return restrictions
 
     @property

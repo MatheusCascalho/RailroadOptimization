@@ -23,6 +23,19 @@ class Restriction:
     sense: str
     resource: float
 
+    def vectorize(self, data):
+        for dimension in data:
+            if isinstance(dimension, np.ndarray):
+                for d in self.vectorize(dimension):
+                    yield d
+            else:
+                yield dimension
+
+    def to_vector(self):
+        data = list(self.vectorize(self.coefficients))
+        data = np.array(data)
+        return data
+
 
 class Restrictions(ABC):
     @abstractmethod

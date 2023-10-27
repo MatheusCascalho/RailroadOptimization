@@ -68,7 +68,7 @@ def test_restriction_matrix_for_two_flows_and_one_train():
                         50  # n1-n1-n2
                     ],
                     [  # n1-n2
-                        60,  # n1-n2-n1
+                        0,  # n1-n2-n1
                         0  # n1-n2-n2
                     ]
                 ],
@@ -78,7 +78,7 @@ def test_restriction_matrix_for_two_flows_and_one_train():
                         50,  # n2-n1-n2
                     ],
                     [  # n2-n2
-                        60,  # n2-n2-n1
+                        0,  # n2-n2-n1
                         0  # n2-n2-n2
                     ]
                 ],
@@ -89,7 +89,7 @@ def test_restriction_matrix_for_two_flows_and_one_train():
                 [  # n1
                     [  # n1-n1
                         0,  # n1-n1-n1
-                        50  # n1-n1-n2
+                        0  # n1-n1-n2
                     ],
                     [  # n1-n2
                         60,  # n1-n2-n1
@@ -99,7 +99,7 @@ def test_restriction_matrix_for_two_flows_and_one_train():
                 [  # n2
                     [  # n2-n1
                         0,  # n2-n1-n1
-                        50,  # n2-n1-n2
+                        0,  # n2-n1-n2
                     ],
                     [  # n2-n2
                         60,  # n2-n2-n1
@@ -108,6 +108,42 @@ def test_restriction_matrix_for_two_flows_and_one_train():
                 ],
             ],
         ]
+    ]
+    expected = np.array(expected)
+
+    np.testing.assert_allclose(actual, expected)
+
+
+def test_restriction_vector_for_two_flows_and_one_train():
+    n1 = Node(name='terminal 1', capacity=500)
+    n2 = Node(name='terminal 2', capacity=600)
+    flows = [
+        Flow(
+            origin=n1,
+            destination=n2,
+            train_volume=50
+        ),
+        Flow(
+            origin=n2,
+            destination=n1,
+            train_volume=60
+        )
+    ]
+    constraint = CapacityRestrictions(trains=1, flows=flows)
+
+    # Act
+    actual = constraint.restrictions[0].to_vector()
+
+    # Assert
+    expected = [
+        0,
+        50,
+        0,
+        0,
+        0,
+        50,
+        0,
+        0
     ]
     expected = np.array(expected)
 
