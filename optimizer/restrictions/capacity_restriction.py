@@ -69,13 +69,13 @@ class CapacityRestrictions(Restrictions):
 
     @staticmethod
     def build_unload_points(flows: list[Flow]):
-        nodes = [f.destination for f in flows]
+        nodes = set([f.destination for f in flows])
         nodes = sorted(nodes, key=lambda x: x.identifier)
         return nodes
 
     @staticmethod
     def build_load_points(flows: list[Flow]):
-        nodes = [f.origin for f in flows]
+        nodes = set([f.origin for f in flows])
         nodes = sorted(nodes, key=lambda x: x.identifier)
         return nodes
 
