@@ -26,11 +26,7 @@ def test_restriction_matrix_for_one_flow_and_one_train():
     # Assert
     expected = [
         [
-            [
-                [
-                    50
-                ]
-            ]
+            50
         ]
     ]
     expected = np.array(expected)
@@ -61,53 +57,25 @@ def test_restriction_matrix_for_two_flows_and_one_train():
     # Assert
     expected = [
         [  # constraints for origin j0
-            [  # t1
-                [  # n1
-                    [  # n1-n1
-                        0,  # n1-n1-n1
-                        50  # n1-n1-n2
-                    ],
-                    [  # n1-n2
-                        0,  # n1-n2-n1
-                        0  # n1-n2-n2
-                    ]
-                ],
-                [  # n2
-                    [  # n2-n1
-                        0,  # n2-n1-n1
-                        50,  # n2-n1-n2
-                    ],
-                    [  # n2-n2
-                        0,  # n2-n2-n1
-                        0  # n2-n2-n2
-                    ]
-                ],
-            ],
+            0,  # t1->n1->n1->n1
+            50,  # t1->n1->n1->n2
+            0,  # t1->n1->n2->n1
+            0,  # t1->n1->n2->n2
+            0,  # t1->n2->n1->n1
+            50,  # t1->n2->n1->n2
+            0,  # t1->n2->n2->n1
+            0  # t1->n2->n2->n2
         ],
         [  # constraints for origin j1
-            [  # t1
-                [  # n1
-                    [  # n1-n1
-                        0,  # n1-n1-n1
-                        0  # n1-n1-n2
-                    ],
-                    [  # n1-n2
-                        60,  # n1-n2-n1
-                        0  # n1-n2-n2
-                    ]
-                ],
-                [  # n2
-                    [  # n2-n1
-                        0,  # n2-n1-n1
-                        0,  # n2-n1-n2
-                    ],
-                    [  # n2-n2
-                        60,  # n2-n2-n1
-                        0  # n2-n2-n2
-                    ]
-                ],
-            ],
-        ]
+            0,  # t1->n1->n1->n1
+            0,  # t1->n1->n1->n2
+            60,  # t1->n1->n2->n1
+            0,  # t1->n1->n2->n2
+            0,  # t1->n2->n1->n1
+            0,  # t1->n2->n1->n2
+            60,  # t1->n2->n2->n1
+            0  # t1->n2->n2->n2
+        ],
     ]
     expected = np.array(expected)
 
@@ -136,14 +104,14 @@ def test_restriction_vector_for_two_flows_and_one_train():
 
     # Assert
     expected = [
-        0,
-        50,
-        0,
-        0,
-        0,
-        50,
-        0,
-        0
+        0,      # t1->n1->n1->n1
+        50,     # t1->n1->n1->n2
+        0,      # t1->n1->n2->n1
+        0,      # t1->n1->n2->n2
+        0,      # t1->n2->n1->n1
+        50,     # t1->n2->n1->n2
+        0,      # t1->n2->n2->n1
+        0       # t1->n2->n2->n2
     ]
     expected = np.array(expected)
 

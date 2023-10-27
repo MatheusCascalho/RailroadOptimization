@@ -77,7 +77,7 @@ class CapacityRestrictions(Restrictions):
 
     @property
     def coefficients_matrix(self) -> np.ndarray:
-        a = [r.coefficients for r in self.restrictions]
+        a = [r.to_vector() for r in self.restrictions]
         a = np.array(a)
         return a
 
