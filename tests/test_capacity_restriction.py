@@ -35,7 +35,7 @@ def test_restriction_matrix_for_one_flow_and_one_train():
     ]
     expected = np.array(expected)
 
-    np.allclose(actual, expected)
+    np.testing.assert_allclose(actual, expected)
 
 
 def test_restriction_matrix_for_two_flows_and_one_train():
@@ -111,4 +111,4 @@ def test_restriction_matrix_for_two_flows_and_one_train():
     ]
     expected = np.array(expected)
 
-    np.allclose(actual, expected)
+    np.testing.assert_allclose(actual, expected)
