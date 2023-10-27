@@ -52,16 +52,16 @@ class CapacityRestrictions(Restrictions):
             matrix = np.zeros(self.__cardinality)
             filtered_flows = [flow for flow in flows if flow.origin == origin]
             if filtered_flows:
-                coefficient = filtered_flows[0].train_volume
-                k = self.__loaded_destinations.index(filtered_flows[0].destination)
-                matrix[:, :, j, k] = coefficient
-                restriction = Restriction(
-                    coefficients=matrix,
-                    sense=self.restriction_type.value,
-                    resource=origin.capacity
-                )
+                for flow in filtered_flows:
+                    coefficient = flow.train_volume
+                    k = self.__loaded_destinations.index(flow.destination)
+                    matrix[:, :, j, k] = coefficient
+                    restriction = Restriction(
+                        coefficients=matrix,
+                        sense=self.restriction_type.value,
+                        resource=origin.capacity
+                    )
                 restrictions.append(restriction)
-                v = restriction.to_vector()
         return restrictions
 
     def restrictions(self) -> list[Restriction]:
