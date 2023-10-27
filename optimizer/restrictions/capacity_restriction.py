@@ -33,10 +33,12 @@ class CapacityRestrictions(Restrictions):
             flows: list[Flow]
     ):
         self.__trains = trains
-        self.__empty_origins = self.build_load_points(flows=flows)
+        self.__empty_origins = self.build_unload_points(flows=flows)
         self.__loaded_origins = self.build_load_points(flows=flows)
         self.__loaded_destinations = self.build_unload_points(flows=flows)
-        self.__cardinality = (self.__trains, len(self.__empty_origins), len(self.__loaded_destinations))
+        u = len(self.__loaded_destinations)
+        l = len(self.__loaded_origins)
+        self.__cardinality = (self.__trains, u, l, u)
         self.__restrictions = self.__build_restrictions(flows=flows)
 
     def __build_restrictions(self, flows):
