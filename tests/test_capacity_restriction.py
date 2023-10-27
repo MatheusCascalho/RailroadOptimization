@@ -100,7 +100,7 @@ def test_restriction_vector_for_two_flows_and_one_train():
     constraint = CapacityRestrictions(trains=1, flows=flows)
 
     # Act
-    actual = constraint.restrictions[0].to_vector()
+    actual = constraint.restrictions()[0].to_vector()
 
     # Assert
     expected = [

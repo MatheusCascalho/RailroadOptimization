@@ -39,20 +39,22 @@ class Restriction:
 
 class Restrictions(ABC):
     @abstractmethod
-    def restrictions(self):
+    def restrictions(self) -> np.ndarray:
         pass
 
     @abstractmethod
     def restriction_type(self) -> RestrictionType:
         pass
 
-    @abstractmethod
+    @property
     def coefficients_matrix(self) -> np.ndarray:
         """
         This method build constraint coefficients as a Matrix
         :return:
         """
-        pass
+        a = [r.to_vector() for r in self.restrictions()]
+        a = np.array(a)
+        return a
 
     @abstractmethod
     def cardinality(self):

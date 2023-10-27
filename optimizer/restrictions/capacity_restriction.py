@@ -59,7 +59,6 @@ class CapacityRestrictions(Restrictions):
                 v = restriction.to_vector()
         return restrictions
 
-    @property
     def restrictions(self) -> list[Restriction]:
         return self.__restrictions
 
@@ -74,12 +73,6 @@ class CapacityRestrictions(Restrictions):
         nodes = [f.origin for f in flows]
         nodes = sorted(nodes, key=lambda x: x.identifier)
         return nodes
-
-    @property
-    def coefficients_matrix(self) -> np.ndarray:
-        a = [r.to_vector() for r in self.restrictions]
-        a = np.array(a)
-        return a
 
     @property
     def restriction_type(self) -> RestrictionType:
