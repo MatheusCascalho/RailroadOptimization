@@ -18,6 +18,11 @@ class Node:
         self.capacity = capacity
         self.identifier = next(self.__id_generator)
 
+    def __repr__(self):
+        return f"{self.identifier}-{self.name}"
+
+    __str__ = __repr__
+
 
 @dataclass
 class Flow:
