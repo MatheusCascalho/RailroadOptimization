@@ -48,8 +48,8 @@ class CapacityRestrictions(Restrictions):
             filtered_flows = [flow for flow in flows if flow.origin == origin]
             if filtered_flows:
                 coefficient = filtered_flows[0].train_volume
-                k = self.__empty_origins.index(filtered_flows[0].destination)
-                matrix[:, j, k] = coefficient
+                k = self.__loaded_destinations.index(filtered_flows[0].destination)
+                matrix[:, :, j, k] = coefficient
                 restriction = Restriction(
                     coefficients=matrix,
                     sense=self.restriction_type.value,
