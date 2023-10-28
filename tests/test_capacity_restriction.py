@@ -1,6 +1,7 @@
 import numpy as np
 
-from optimizer.restrictions.capacity_restriction import CapacityRestrictions, Node, Flow
+from optimizer.restrictions.capacity_restriction import CapacityRestrictions
+from optimizer.restrictions.railroad_elements import Node, Flow
 
 
 def test_node_ids_should_follow_numeric_sequence_by_object_creation():
