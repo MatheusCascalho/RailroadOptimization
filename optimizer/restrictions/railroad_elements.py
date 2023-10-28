@@ -27,3 +27,54 @@ class Flow:
     origin: Node
     destination: Node
     train_volume: float
+
+
+@dataclass
+class ExchangeBand:
+    node: Node
+    band: int
+
+
+class RailroadProblemTemplate:
+    def __init__(
+            self,
+            trains: int,
+            flows: list[Flow]
+    ):
+        self.__trains = trains
+        self.__empty_origins = self.build_unload_points(flows=flows)
+        self.__loaded_origins = self.build_load_points(flows=flows)
+        self.__loaded_destinations = self.build_unload_points(flows=flows)
+        u = len(self.__loaded_destinations)
+        l = len(self.__loaded_origins)
+        self.__cardinality = (self.__trains, u, l, u)
+
+    @property
+    def loaded_origins(self):
+        return self.__loaded_origins
+
+    @property
+    def loaded_destinations(self):
+        return self.__loaded_destinations
+
+    @property
+    def empty_origins(self):
+        return self.__empty_origins
+
+    @property
+    def cardinality(self):
+        return self.__cardinality
+
+    @staticmethod
+    def build_unload_points(flows: list[Flow]):
+        nodes = set([f.destination for f in flows])
+        nodes = sorted(nodes, key=lambda x: x.identifier)
+        return nodes
+
+    @staticmethod
+    def build_load_points(flows: list[Flow]):
+        nodes = set([f.origin for f in flows])
+        nodes = sorted(nodes, key=lambda x: x.identifier)
+        return nodes
+
+

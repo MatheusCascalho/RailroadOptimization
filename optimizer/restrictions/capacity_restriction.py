@@ -1,60 +1,42 @@
 import numpy as np
-from optimizer.restrictions.railroad_elements import Flow
+from optimizer.restrictions.railroad_elements import Flow, RailroadProblemTemplate
 from optimizer.restrictions.restrictions import Restrictions, RestrictionType, Restriction
 
 
-class CapacityRestrictions(Restrictions):
+class CapacityRestrictions(RailroadProblemTemplate, Restrictions):
     def __init__(
             self,
             trains: int,
             flows: list[Flow]
     ):
-        self.__trains = trains
-        self.__empty_origins = self.build_unload_points(flows=flows)
-        self.__loaded_origins = self.build_load_points(flows=flows)
-        self.__loaded_destinations = self.build_unload_points(flows=flows)
-        u = len(self.__loaded_destinations)
-        l = len(self.__loaded_origins)
-        self.__cardinality = (self.__trains, u, l, u)
+        super().__init__(
+            trains=trains,
+            flows=flows
+        )
         self.__restrictions = self.__build_restrictions(flows=flows)
 
     def __build_restrictions(self, flows):
         restrictions = []
-        for j, origin in enumerate(self.__loaded_origins):
-            matrix = np.zeros(self.__cardinality)
+        for j, origin in enumerate(self.loaded_origins):
+            matrix = np.zeros(self.cardinality)
             filtered_flows = [flow for flow in flows if flow.origin == origin]
             if filtered_flows:
                 for flow in filtered_flows:
                     coefficient = flow.train_volume
-                    k = self.__loaded_destinations.index(flow.destination)
+                    k = self.loaded_destinations.index(flow.destination)
                     matrix[:, :, j, k] = coefficient
                     restriction = Restriction(
                         coefficients=matrix,
                         sense=self.restriction_type.value,
                         resource=origin.capacity
                     )
-                restrictions.append(restriction)
+                    restrictions.append(restriction)
         return restrictions
 
     def restrictions(self) -> list[Restriction]:
         return self.__restrictions
 
-    @staticmethod
-    def build_unload_points(flows: list[Flow]):
-        nodes = set([f.destination for f in flows])
-        nodes = sorted(nodes, key=lambda x: x.identifier)
-        return nodes
-
-    @staticmethod
-    def build_load_points(flows: list[Flow]):
-        nodes = set([f.origin for f in flows])
-        nodes = sorted(nodes, key=lambda x: x.identifier)
-        return nodes
-
     @property
     def restriction_type(self) -> RestrictionType:
         return RestrictionType.LESS_OR_EQUAL
 
-    @property
-    def cardinality(self):
-        return self.__cardinality
