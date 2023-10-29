@@ -42,6 +42,13 @@ class TransitTime:
     time: float
 
 
+@dataclass
+class Demand:
+    flow: Flow
+    minimum: float
+    maximum: float
+
+
 class RailroadProblemTemplate:
     def __init__(
             self,
