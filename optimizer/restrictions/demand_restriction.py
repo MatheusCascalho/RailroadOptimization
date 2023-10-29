@@ -8,11 +8,10 @@ class MinimumDemandRestriction(RailroadProblemTemplate, Restrictions):
             self,
             trains,
             demands: list[Demand],
-            flows: list[Flow]
     ):
         super().__init__(
             trains=trains,
-            flows=flows
+            flows=[d.flow for d in demands]
         )
         self.__restrictions = self.__build_restrictions(demands=demands)
 
@@ -50,12 +49,11 @@ class MaximumDemandRestriction(RailroadProblemTemplate, Restrictions):
     def __init__(
             self,
             trains,
-            demands: list[Demand],
-            flows: list[Flow]
+            demands: list[Demand]
     ):
         super().__init__(
             trains=trains,
-            flows=flows
+            flows=[d.flow for d in demands]
         )
         self.__restrictions = self.__build_restrictions(demands=demands)
 
