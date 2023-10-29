@@ -119,6 +119,36 @@ def test_restriction_vector_for_two_flows_and_one_train():
     np.testing.assert_allclose(actual, expected)
 
 
+def test_resource_vector_for_two_flows_and_one_train():
+    n1 = Node(name='terminal 1', capacity=500)
+    n2 = Node(name='terminal 2', capacity=600)
+    flows = [
+        Flow(
+            origin=n1,
+            destination=n2,
+            train_volume=50
+        ),
+        Flow(
+            origin=n2,
+            destination=n1,
+            train_volume=60
+        )
+    ]
+    constraint = CapacityRestrictions(trains=1, flows=flows)
+
+    # Act
+    actual = constraint.resource_vector
+
+    # Assert
+    expected = [
+        500,
+        600
+    ]
+    expected = np.array(expected)
+
+    np.testing.assert_allclose(actual, expected)
+
+
 def test_restriction_vector_for_one_origin_and_two_destinations_and_two_trains():
     n1 = Node(name='terminal 1', capacity=500)
     n2 = Node(name='terminal 2', capacity=600)

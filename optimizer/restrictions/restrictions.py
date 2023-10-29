@@ -39,7 +39,7 @@ class Restriction:
 
 class Restrictions(ABC):
     @abstractmethod
-    def restrictions(self) -> np.ndarray:
+    def restrictions(self) -> list[Restriction]:
         pass
 
     @abstractmethod
@@ -55,6 +55,12 @@ class Restrictions(ABC):
         a = [r.to_vector() for r in self.restrictions()]
         a = np.array(a)
         return a
+
+    @property
+    def resource_vector(self) -> np.ndarray:
+        b = [r.resource for r in self.restrictions()]
+        b = np.array(b)
+        return b
 
     @abstractmethod
     def cardinality(self):
