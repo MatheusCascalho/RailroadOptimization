@@ -39,7 +39,7 @@ class ExchangeBand:
 class TransitTime:
     origin: Node
     destination: Node
-    time = float
+    time: float
 
 
 class RailroadProblemTemplate:
