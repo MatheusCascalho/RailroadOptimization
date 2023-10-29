@@ -35,6 +35,13 @@ class ExchangeBand:
     band: int
 
 
+@dataclass
+class TransitTime:
+    origin: Node
+    destination: Node
+    time = float
+
+
 class RailroadProblemTemplate:
     def __init__(
             self,
