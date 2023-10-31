@@ -20,18 +20,20 @@ class TimeHorizonRestriction(RailroadProblemTemplate, Restrictions):
     def __build_restrictions(self, transit_times: list[TransitTime], time_horizon: int) -> list[Restriction]:
         restrictions = []
         transit_matrix = self.__build_transit_matrix(transit_times=transit_times)
-        matrix = np.zeros(self.cardinality)
-        for j in range(len(self.loaded_origins)):
-            for k in range(len(self.loaded_destinations)):
-                time = transit_matrix[j, k]
-                matrix[:, :, j, k] += time
-                matrix[:, k, j, :] += time
-                restriction = Restriction(
-                    coefficients=matrix,
-                    sense=self.restriction_type.value,
-                    resource=time_horizon
-                )
-                restrictions.append(restriction)
+
+        for n in range(self.cardinality[0]):
+            matrix = np.zeros(self.cardinality)
+            for j in range(len(self.loaded_origins)):
+                for k in range(len(self.loaded_destinations)):
+                    time = transit_matrix[j, k]
+                    matrix[n, :, j, k] += time
+                    matrix[n, k, j, :] += time
+            restriction = Restriction(
+                coefficients=matrix,
+                sense=self.restriction_type.value,
+                resource=time_horizon
+            )
+            restrictions.append(restriction)
         return restrictions
 
     def __build_transit_matrix(self, transit_times: list[TransitTime]) -> np.ndarray:
