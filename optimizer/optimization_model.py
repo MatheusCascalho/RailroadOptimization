@@ -23,42 +23,84 @@ class RailroadOptimizationProblem:
     ):
         # Building constraints
         flows = [d.flow for d in demands]
-        capacity = CapacityRestrictions(trains=trains, flows=flows)
-        exchange = ExchangeRestriction(trains=trains, bands=exchange_bands, flows=flows)
-        time_horizon = TimeHorizonRestriction(
+        self.trains = trains
+        self.capacity = CapacityRestrictions(trains=trains, flows=flows)
+        self.exchange = ExchangeRestriction(trains=trains, bands=exchange_bands, flows=flows)
+        self.time_horizon = TimeHorizonRestriction(
             trains=trains,
             transit_times=transit_times,
             flows=flows,
             time_horizon=time_horizon
         )
-        minimum_demand = MinimumDemandRestriction(trains=trains, demands=demands)
-        maximum_demand = MaximumDemandRestriction(trains=trains, demands=demands)
-        self.constraints = []
-        self.constraints.extend(capacity.restrictions())
+        self.minimum_demand = MinimumDemandRestriction(trains=trains, demands=demands)
+        self.maximum_demand = MaximumDemandRestriction(trains=trains, demands=demands)
+        self.costs = sum([r.coefficients for r in self.maximum_demand.restrictions()])
 
-        # Building vars label
-        labels = []
-        for n in range(trains):
-            for i, e_origin in enumerate(capacity.empty_origins):
-                for j, l_origin in enumerate(capacity.loaded_origins):
-                    for k, l_destination in enumerate(capacity.loaded_destinations):
-                        # label = f"train_{n}-empty_{i}-from_{j}_to-{k}"
-                        label = (n, i, j, k)
-                        labels.append(label)
+        self.geq_constraints = []
+        self.geq_constraints.extend(self.capacity.restrictions())
+        self.geq_constraints.extend(self.exchange.restrictions())
+        self.geq_constraints.extend(self.time_horizon.restrictions())
+        self.geq_constraints.extend(self.maximum_demand.restrictions())
 
+        self.leq_constraints = []
+        self.leq_constraints.extend(self.minimum_demand.restrictions())
 
+        labels = self.labels()
 
         # Building GUROBI model
         model = gp.Model("Railroad Optimization Problem")
+        # model.setParam('OutputFlag', 0)
         x = model.addVars(
             labels,
             vtype=gp.GRB.INTEGER
         )
         model.setObjective(
-            expr=gp.quicksum([x.values()[i] * np.sum(maximum_demand.coefficients_matrix, axis=0)[i] for i in range(len(labels))]),
+            expr=gp.quicksum([x[i] * self.costs[i] for i in x]),
             sense=gp.GRB.MAXIMIZE
         )
-        print(model)
+
+        for r in self.geq_constraints:
+            model.addConstr(gp.quicksum([x[i] * r.coefficients[i] for i in labels]) <= r.resource)
+        for r in self.leq_constraints:
+            model.addConstr(gp.quicksum([x[i] * r.coefficients[i] for i in labels]) >= r.resource)
+
+        print(model.optimize())
+
+        print("="*50)
+        matrix = np.zeros(self.capacity.cardinality)
+        for label in labels:
+            matrix[label] = x[label].X
+        result = np.sum(matrix, axis=(0, 1))
+        print(f"Aceite ótimo: {model.objVal}\n")
+        for j, origin in enumerate(self.maximum_demand.loaded_origins):
+            for k, destination in enumerate(self.maximum_demand.loaded_destinations):
+                travels = result[j, k]
+                print(f"{origin}->{destination}: {travels} travels")
+
+        print("="*50)
+
+    def labels(self):
+        # Building vars label
+        labels = []
+        for n in range(self.trains):
+            for i, e_origin in enumerate(self.capacity.empty_origins):
+                for j, l_origin in enumerate(self.capacity.loaded_origins):
+                    for k, l_destination in enumerate(self.capacity.loaded_destinations):
+                        # label = f"train_{n}-empty_{i}-from_{j}_to-{k}"
+                        label = (n, i, j, k)
+                        labels.append(label)
+        return labels
+
+    def __repr__(self):
+        repr = ""
+        for r in self.geq_constraints:
+            lhs = ""
+            for i in self.labels():
+                lhs += str(r.coefficients[i]) + f"*x_{'|'.join([str(x) for x in i])} " + "\t\t"
+            lhs = lhs[:-1].replace("\t\t", "\t+")
+            repr += f"{lhs} {r.sense}= {r.resource} \n"
+
+        return repr
 
 
 if __name__=='__main__':
@@ -77,13 +119,13 @@ if __name__=='__main__':
     )
 
     demands = [
-        Demand(flow=f1, minimum=30e3, maximum=50e3),
-        Demand(flow=f2, minimum=20e3, maximum=40e3),
+        Demand(flow=f1, minimum=200, maximum=50e3),
+        Demand(flow=f2, minimum=100, maximum=40e3),
     ]
 
     transit_times = [
-        TransitTime(origin=n1, destination=n2, time=20),
-        TransitTime(origin=n1, destination=n3, time=30),
+        TransitTime(origin=n1, destination=n2, time=2.5),
+        TransitTime(origin=n1, destination=n3, time=3.9),
     ]
     problem = RailroadOptimizationProblem(
         trains=1,
