@@ -66,18 +66,21 @@ class RailroadOptimizationProblem:
 
         print(model.optimize())
 
-        print("="*50)
-        matrix = np.zeros(self.capacity.cardinality)
-        for label in labels:
-            matrix[label] = x[label].X
-        result = np.sum(matrix, axis=(0, 1))
-        print(f"Aceite ótimo: {model.objVal}\n")
-        for j, origin in enumerate(self.maximum_demand.loaded_origins):
-            for k, destination in enumerate(self.maximum_demand.loaded_destinations):
-                travels = result[j, k]
-                print(f"{origin}->{destination}: {travels} travels")
+        if model.status == gp.GRB.OPTIMAL:
+            print("="*50)
+            matrix = np.zeros(self.capacity.cardinality)
+            for label in labels:
+                matrix[label] = x[label].X
+            result = np.sum(matrix, axis=(0, 1))
+            demanda = round(sum(d.resource for d in self.maximum_demand.restrictions()), 1)
+            print(f"Demanda: {demanda} | Aceite ótimo: {model.objVal}\n")
+            for j, origin in enumerate(self.maximum_demand.loaded_origins):
+                for k, destination in enumerate(self.maximum_demand.loaded_destinations):
+                    travels = result[j, k]
+                    if travels:
+                        print(f"{origin}->{destination}: {travels} travels")
 
-        print("="*50)
+            print("="*50)
 
     def labels(self):
         # Building vars label
