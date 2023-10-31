@@ -82,9 +82,10 @@ problem = RailroadOptimizationProblem(
     transit_times=transit,
     demands=demand,
     exchange_bands=[],
-    time_horizon=90
+    time_horizon=90,
+    max_time=10
 )
-# print(problem)
+print(problem)
 """ Output
 Academic license - for non-commercial use only - expires 2024-10-28
 Gurobi Optimizer version 10.0.3 build v10.0.3rc0 (linux64)
