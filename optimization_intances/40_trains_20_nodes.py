@@ -73,12 +73,12 @@ def build_demands(flows: list[Flow], demand_interval=(2e3, 50e3), with_minimum=.
 
 nodes = build_nodes(amount=10, capacity_interval=(10e6, 10e6))
 flows = build_flows(nodes=nodes)
-demand = build_demands(flows=flows, with_minimum=0.2)
+demand = build_demands(flows=flows, with_minimum=0)
 transit = build_transits(flows=flows, transit_interval=(1, 2))
 
 
 problem = RailroadOptimizationProblem(
-    trains=50,
+    trains=40,
     transit_times=transit,
     demands=demand,
     exchange_bands=[],
