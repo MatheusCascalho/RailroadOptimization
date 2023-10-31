@@ -1,0 +1,88 @@
+/home/matheus/.virtualenvs/RailroadOptimization/bin/python /home/matheus/Documentos/pessoais/RailroadOptimization/optimization_intances/40_trains_10_nodes.py
+Set parameter Username
+Academic license - for non-commercial use only - expires 2024-10-28
+Set parameter TimeLimit to value 60
+Gurobi Optimizer version 10.0.3 build v10.0.3rc0 (linux64)
+
+CPU model: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz, instruction set [SSE2|AVX|AVX2]
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+
+Optimize a model with 140 rows, 40000 columns and 111600 nonzeros
+Model fingerprint: 0x32749d1c
+Variable types: 0 continuous, 40000 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 8e+01]
+  Objective range  [5e+01, 8e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [9e+01, 1e+07]
+Found heuristic solution: objective 131367.00000
+Presolve removed 10 rows and 36400 columns
+Presolve time: 0.08s
+Presolved: 130 rows, 3600 columns, 7200 nonzeros
+Variable types: 0 continuous, 3600 integer (0 binary)
+Found heuristic solution: objective 157316.00000
+
+Root relaxation: objective 2.439499e+05, 167 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 243949.942    0   36 157316.000 243949.942  55.1%     -    0s
+H    0     0                    243269.00000 243949.942  0.28%     -    0s
+H    0     0                    243658.00000 243949.942  0.12%     -    0s
+H    0     0                    243732.00000 243949.942  0.09%     -    0s
+     0     0 243949.942    0   60 243732.000 243949.942  0.09%     -    0s
+H    0     0                    243754.00000 243949.942  0.08%     -    0s
+     0     0 243949.942    0   45 243754.000 243949.942  0.08%     -    0s
+     0     0 243949.942    0   45 243754.000 243949.942  0.08%     -    0s
+     0     2 243949.942    0   44 243754.000 243949.942  0.08%     -    0s
+H   32    34                    243791.00000 243949.942  0.07%   5.6    0s
+H   65    81                    243845.00000 243949.942  0.04%   4.3    1s
+H  599   802                    243861.00000 243949.942  0.04%   2.9    1s
+H  683   802                    243876.00000 243949.942  0.03%   2.7    1s
+  4179  4071 243946.443   31   42 243876.000 243946.443  0.03%   3.0    5s
+H 5714  5085                    243894.00000 243946.443  0.02%   3.6    6s
+ 13350 10294 243898.563  547   42 243894.000 243946.443  0.02%   3.1   10s
+ 19730 13575 243895.087  745   28 243894.000 243946.443  0.02%   3.0   15s
+ 33142 21714 243946.443  217   48 243894.000 243946.443  0.02%   3.0   20s
+ 43971 27923 243936.485  260   44 243894.000 243946.443  0.02%   2.9   25s
+ 57376 38325 243946.443  252   30 243894.000 243946.443  0.02%   2.8   30s
+ 67305 47467 243896.728  315   40 243894.000 243946.443  0.02%   2.8   35s
+ 80120 57661 243945.135  411   35 243894.000 243946.443  0.02%   2.7   40s
+ 90680 66142 243926.087  331   28 243894.000 243946.443  0.02%   2.7   45s
+ 102305 75948 243894.990  641   45 243894.000 243946.443  0.02%   2.7   50s
+ 113247 85884 243938.747  583   38 243894.000 243946.443  0.02%   2.7   55s
+ 126743 96763 243933.327  378   35 243894.000 243946.443  0.02%   2.6   60s
+
+Cutting planes:
+  Gomory: 7
+  MIR: 14
+  StrongCG: 14
+
+Explored 127516 nodes (334913 simplex iterations) in 60.05 seconds (30.99 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 243894 243876 243861 ... 157316
+
+Time limit reached
+Best objective 2.438940000000e+05, best bound 2.439460000000e+05, gap 0.0213%
+None
+==================================================
+Demanda: 2376580.2 | Aceite ótimo: 243894.0
+
+0-terminal_0->4-terminal_4: 48.0 travels
+1-terminal_1->3-terminal_3: 71.0 travels
+1-terminal_1->4-terminal_4: 250.0 travels
+1-terminal_1->8-terminal_8: 395.0 travels
+2-terminal_2->4-terminal_4: 613.0 travels
+3-terminal_3->0-terminal_0: 95.0 travels
+4-terminal_4->3-terminal_3: 257.0 travels
+5-terminal_5->7-terminal_7: 403.0 travels
+5-terminal_5->8-terminal_8: 9.0 travels
+7-terminal_7->0-terminal_0: 94.0 travels
+7-terminal_7->2-terminal_2: 303.0 travels
+7-terminal_7->9-terminal_9: 614.0 travels
+8-terminal_8->3-terminal_3: 90.0 travels
+==================================================
+
+Process finished with exit code 0

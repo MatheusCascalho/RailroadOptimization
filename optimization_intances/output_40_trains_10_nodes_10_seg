@@ -1,0 +1,82 @@
+/home/matheus/.virtualenvs/RailroadOptimization/bin/python /home/matheus/Documentos/pessoais/RailroadOptimization/optimization_intances/40_trains_10_nodes.py
+Set parameter Username
+Academic license - for non-commercial use only - expires 2024-10-28
+Set parameter TimeLimit to value 10
+Gurobi Optimizer version 10.0.3 build v10.0.3rc0 (linux64)
+
+CPU model: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz, instruction set [SSE2|AVX|AVX2]
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+
+Optimize a model with 140 rows, 40000 columns and 111600 nonzeros
+Model fingerprint: 0x6017f58d
+Variable types: 0 continuous, 40000 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 8e+01]
+  Objective range  [5e+01, 8e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [9e+01, 1e+07]
+Found heuristic solution: objective 142256.00000
+Presolve removed 10 rows and 36400 columns
+Presolve time: 0.07s
+Presolved: 130 rows, 3600 columns, 7200 nonzeros
+Variable types: 0 continuous, 3600 integer (0 binary)
+Found heuristic solution: objective 160102.00000
+
+Root relaxation: objective 2.438360e+05, 139 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 243835.951    0   42 160102.000 243835.951  52.3%     -    0s
+H    0     0                    243023.00000 243835.951  0.33%     -    0s
+H    0     0                    243485.00000 243835.951  0.14%     -    0s
+     0     0 243835.951    0   68 243485.000 243835.951  0.14%     -    0s
+H    0     0                    243601.00000 243835.951  0.10%     -    0s
+     0     0 243835.951    0   69 243601.000 243835.951  0.10%     -    0s
+     0     0 243835.951    0   54 243601.000 243835.951  0.10%     -    0s
+     0     0 243835.951    0   54 243601.000 243835.951  0.10%     -    0s
+     0     2 243835.951    0   53 243601.000 243835.951  0.10%     -    0s
+H   31    34                    243611.00000 243835.951  0.09%   8.7    1s
+H   32    34                    243676.00000 243835.951  0.07%   9.0    1s
+H  129   192                    243700.00000 243835.951  0.06%   5.7    1s
+H 1352  1508                    243706.00000 243835.951  0.05%   3.0    1s
+H 1541  1577                    243721.00000 243835.951  0.05%   3.0    2s
+H 1554  1575                    243738.00000 243835.951  0.04%   3.0    2s
+  5223  5110 243832.940  151   54 243738.000 243835.951  0.04%   3.0    5s
+  6235  5888 243833.838   96   49 243738.000 243833.838  0.04%   3.4   10s
+
+Cutting planes:
+  Gomory: 24
+  MIR: 54
+  StrongCG: 41
+
+Explored 6421 nodes (21697 simplex iterations) in 10.03 seconds (4.15 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 243738 243721 243706 ... 160102
+
+Time limit reached
+Best objective 2.437380000000e+05, best bound 2.438338378378e+05, gap 0.0393%
+None
+==================================================
+Demanda: 2211526.3 | Aceite ótimo: 243738.0
+
+0-terminal_0->4-terminal_4: 42.0 travels
+1-terminal_1->3-terminal_3: 273.0 travels
+1-terminal_1->4-terminal_4: 527.0 travels
+1-terminal_1->8-terminal_8: 50.0 travels
+2-terminal_2->4-terminal_4: 327.0 travels
+3-terminal_3->0-terminal_0: 5.0 travels
+4-terminal_4->3-terminal_3: 490.0 travels
+5-terminal_5->7-terminal_7: 316.0 travels
+5-terminal_5->8-terminal_8: 4.0 travels
+7-terminal_7->0-terminal_0: 293.0 travels
+7-terminal_7->2-terminal_2: 411.0 travels
+7-terminal_7->9-terminal_9: 355.0 travels
+8-terminal_8->3-terminal_3: 186.0 travels
+==================================================
+Problem with 140 constraints and 40000 variables
+
+
+
+Process finished with exit code 0
