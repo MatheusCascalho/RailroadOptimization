@@ -26,7 +26,7 @@ class MinimumDemandRestriction(RailroadProblemTemplate, Restrictions):
                     if d.flow.origin == origin and
                        d.flow.destination == destination
                 ]
-                if filtered_bands:
+                if filtered_bands and filtered_bands[0].minimum:
                     demand = filtered_bands[0]
                     matrix[:, :, j, k] = demand.flow.train_volume
                     restriction = Restriction(
