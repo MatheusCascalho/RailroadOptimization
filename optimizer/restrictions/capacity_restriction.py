@@ -25,12 +25,12 @@ class CapacityRestrictions(RailroadProblemTemplate, Restrictions):
                     coefficient = flow.train_volume
                     k = self.loaded_destinations.index(flow.destination)
                     matrix[:, :, j, k] = coefficient
-                    restriction = Restriction(
-                        coefficients=matrix,
-                        sense=self.restriction_type.value,
-                        resource=origin.capacity
-                    )
-                    restrictions.append(restriction)
+                restriction = Restriction(
+                    coefficients=matrix,
+                    sense=self.restriction_type.value,
+                    resource=origin.capacity
+                )
+                restrictions.append(restriction)
         return restrictions
 
     def restrictions(self) -> list[Restriction]:
