@@ -96,6 +96,11 @@ class RailroadOptimizationProblem:
 
     def __repr__(self):
         repr = f"Problem with {len(self.geq_constraints+self.leq_constraints)} constraints and {len(self.labels())} variables\n\n"
+
+        return repr
+
+    def complete_repr(self):
+        repr = f"Problem with {len(self.geq_constraints + self.leq_constraints)} constraints and {len(self.labels())} variables\n\n"
         for r in self.geq_constraints+self.leq_constraints:
             lhs = ""
             for i in self.labels():
