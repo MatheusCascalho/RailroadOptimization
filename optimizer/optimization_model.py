@@ -19,7 +19,8 @@ class RailroadOptimizationProblem:
             demands: list[Demand],
             transit_times: list[TransitTime],
             exchange_bands: list[ExchangeBand],
-            time_horizon: int
+            time_horizon: int,
+            max_time: int = 60
     ):
         # Building constraints
         flows = [d.flow for d in demands]
@@ -49,6 +50,7 @@ class RailroadOptimizationProblem:
 
         # Building GUROBI model
         model = gp.Model("Railroad Optimization Problem")
+        model.Params.TimeLimit = max_time
         # model.setParam('OutputFlag', 0)
         x = model.addVars(
             labels,
@@ -66,7 +68,7 @@ class RailroadOptimizationProblem:
 
         print(model.optimize())
 
-        if model.status == gp.GRB.OPTIMAL:
+        if model.status == gp.GRB.OPTIMAL or model.status == gp.GRB.TIME_LIMIT:
             print("="*50)
             matrix = np.zeros(self.capacity.cardinality)
             for label in labels:
