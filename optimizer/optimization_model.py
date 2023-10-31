@@ -95,11 +95,12 @@ class RailroadOptimizationProblem:
         return labels
 
     def __repr__(self):
-        repr = ""
+        repr = f"Problem with {len(self.geq_constraints+self.leq_constraints)} constraints and {len(self.labels())} variables\n\n"
         for r in self.geq_constraints:
             lhs = ""
             for i in self.labels():
-                lhs += str(r.coefficients[i]) + f"*x_{'|'.join([str(x) for x in i])} " + "\t\t"
+                if r.coefficients[i] != 0:
+                    lhs += str(r.coefficients[i]) + f"*x_{'|'.join([str(x) for x in i])} " + "\t\t"
             lhs = lhs[:-1].replace("\t\t", "\t+")
             repr += f"{lhs} {r.sense}= {r.resource} \n"
 
