@@ -71,7 +71,7 @@ def build_demands(flows: list[Flow], demand_interval=(20e3, 50e3), with_minimum=
 
 
 
-nodes = build_nodes(amount=10, capacity_interval=(30*4e3, 5*30*8e3))
+nodes = build_nodes(amount=10, capacity_interval=(30*8e3, 5*30*8e3))
 flows = build_flows(nodes=nodes, train_capacity_interval=(4e3, 8e3))
 demand = build_demands(flows=flows, with_minimum=0, demand_interval=(10e3, 500e3))
 transit = build_transits(flows=flows, transit_interval=(1, 2))
