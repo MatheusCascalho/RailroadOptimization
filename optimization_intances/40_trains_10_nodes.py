@@ -16,7 +16,7 @@ def build_nodes(amount=2, capacity_interval=(500, 800)):
     return nodes
 
 
-def build_flows(nodes: list[Node], train_capacity_interval: tuple=(50, 80)):
+def build_flows(nodes: list[Node], train_capacity_interval: tuple=(5e3, 8e3)):
     flows = []
     for origin in nodes:
         for destination in nodes:
@@ -44,7 +44,7 @@ def build_transits(flows: list[Flow], transit_interval=(2, 5)):
     return transits
 
 
-def build_demands(flows: list[Flow], demand_interval=(2e3, 50e3), with_minimum=.2):
+def build_demands(flows: list[Flow], demand_interval=(20e3, 50e3), with_minimum=.2):
     demands = []
     flows_with_minimum = np.floor(len(flows)*with_minimum)
 
@@ -71,9 +71,9 @@ def build_demands(flows: list[Flow], demand_interval=(2e3, 50e3), with_minimum=.
 
 
 
-nodes = build_nodes(amount=10, capacity_interval=(10e6, 10e6))
-flows = build_flows(nodes=nodes)
-demand = build_demands(flows=flows, with_minimum=0)
+nodes = build_nodes(amount=10, capacity_interval=(30*4e3, 5*30*8e3))
+flows = build_flows(nodes=nodes, train_capacity_interval=(4e3, 8e3))
+demand = build_demands(flows=flows, with_minimum=0, demand_interval=(10e3, 500e3))
 transit = build_transits(flows=flows, transit_interval=(1, 2))
 
 
@@ -83,7 +83,7 @@ problem = RailroadOptimizationProblem(
     demands=demand,
     exchange_bands=[],
     time_horizon=90,
-    max_time=3*60*60
+    max_time=10*60
 )
 print(problem)
 """ Output
