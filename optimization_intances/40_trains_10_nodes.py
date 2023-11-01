@@ -83,7 +83,7 @@ problem = RailroadOptimizationProblem(
     demands=demand,
     exchange_bands=[],
     time_horizon=90,
-    max_time=10
+    max_time=3*60*60
 )
 print(problem)
 """ Output
