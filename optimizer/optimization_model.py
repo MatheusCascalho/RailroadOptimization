@@ -177,23 +177,23 @@ class RailroadOptimizationProblem:
 
 
 if __name__=='__main__':
-    n1 = Node(name='terminal 1', capacity=500)
+    n1 = Node(name='terminal 1', capacity=50e3)
     n2 = Node(name='terminal 2', capacity=600)
     n3 = Node(name='terminal 3', capacity=600)
     f1 = Flow(
         origin=n1,
         destination=n2,
-        train_volume=50
+        train_volume=5e3
     )
     f2 = Flow(
         origin=n1,
         destination=n3,
-        train_volume=60
+        train_volume=6e3
     )
 
     demands = [
-        Demand(flow=f1, minimum=200, maximum=50e3),
-        Demand(flow=f2, minimum=100, maximum=40e3),
+        Demand(flow=f1, minimum=5e3, maximum=50e3),
+        Demand(flow=f2, minimum=4e3, maximum=40e3),
     ]
 
     transit_times = [
@@ -201,7 +201,7 @@ if __name__=='__main__':
         TransitTime(origin=n1, destination=n3, time=3.9),
     ]
     problem = RailroadOptimizationProblem(
-        trains=1,
+        trains=2,
         transit_times=transit_times,
         demands=demands,
         exchange_bands=[],
