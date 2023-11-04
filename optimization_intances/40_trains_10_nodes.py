@@ -16,6 +16,17 @@ problem = RailroadOptimizationProblem(
     max_time=10*60
 )
 print(problem)
+
+result = problem.optimize(max_time=60)
+print(result.accpt_volume(verbose=False))
+
+print("=" * 50)
+print("Relatório de envio de vazios")
+print(result.empty_offer())
+
+print("Utilização de trem")
+print(result.train_utilization(total_time=90))
+
 """ Output
 Academic license - for non-commercial use only - expires 2024-10-28
 Gurobi Optimizer version 10.0.3 build v10.0.3rc0 (linux64)

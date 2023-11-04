@@ -10,6 +10,65 @@ from optimizer.restrictions.capacity_restriction import CapacityRestrictions
 from optimizer.restrictions.exchange_restriction import ExchangeRestriction
 from optimizer.restrictions.time_horizon_restriction import TimeHorizonRestriction
 from optimizer.restrictions.demand_restriction import MaximumDemandRestriction, MinimumDemandRestriction
+from dataclasses import dataclass
+import pandas as pd
+
+
+@dataclass
+class RailroadResult:
+    optimization_result: np.ndarray
+    load_terminals: list[Node]
+    unload_terminals: list[Node]
+    demand: list[Demand]
+    transit_times: np.ndarray
+
+    def accpt_volume(self, verbose=True):
+        accept = []
+        train_volumes = np.zeros((len(self.load_terminals), len(self.unload_terminals)))
+        travels = np.sum(self.optimization_result, axis=(0, 1))
+        for demand in self.demand:
+            train_volume = demand.flow.train_volume
+            i = self.load_terminals.index(demand.flow.origin)
+            j = self.unload_terminals.index(demand.flow.destination)
+            train_volumes[i, j] = train_volume
+            flow_travels = travels[i, j]
+            flow_volume = flow_travels * train_volume
+            if verbose:
+                print(f"{demand.flow.origin}->{demand.flow.destination}: {flow_volume} TU \t")
+            accept.append({
+                "origin": demand.flow.origin,
+                "destination": demand.flow.destination,
+                "demand max": demand.maximum,
+                "demand minimum": demand.minimum,
+                "accept volume": flow_volume
+            })
+        accept = pd.DataFrame(accept)
+        return accept
+
+    def empty_offer(self):
+        report = []
+        empty_travels = np.sum(self.optimization_result, axis=(0, 3))
+        for i, origin in enumerate(self.unload_terminals):
+            for j, destination in enumerate(self.load_terminals):
+                travels = empty_travels[i, j]
+                report.append({
+                    "origin": origin,
+                    "destination": destination,
+                    "travels": travels
+                })
+        report = pd.DataFrame(report)
+        return report
+
+    def train_utilization(self, total_time):
+        travel_times = self.optimization_result * self.transit_times
+        time_by_train = np.sum(travel_times, axis=(1, 2, 3)) / total_time
+        return time_by_train
+
+    def travels_by_train(self):
+        travels = np.sum(self.optimization_result, axis=(1, 2, 3))
+        return travels
+
+
 
 
 class RailroadOptimizationProblem:
@@ -23,9 +82,12 @@ class RailroadOptimizationProblem:
             max_time: int = 60
     ):
         # Building constraints
+        self.demand = demands
         flows = [d.flow for d in demands]
         self.trains = trains
         self.capacity = CapacityRestrictions(trains=trains, flows=flows)
+        print(f"Cardinality: {self.capacity.cardinality}")
+
         self.exchange = ExchangeRestriction(trains=trains, bands=exchange_bands, flows=flows)
         self.time_horizon = TimeHorizonRestriction(
             trains=trains,
@@ -46,8 +108,10 @@ class RailroadOptimizationProblem:
         self.leq_constraints = []
         self.leq_constraints.extend(self.minimum_demand.restrictions())
 
-        labels = self.labels()
 
+    def optimize(self, max_time):
+        print(self)
+        labels = self.labels()
         # Building GUROBI model
         model = gp.Model("Railroad Optimization Problem")
         model.Params.TimeLimit = max_time
@@ -73,16 +137,14 @@ class RailroadOptimizationProblem:
             matrix = np.zeros(self.capacity.cardinality)
             for label in labels:
                 matrix[label] = x[label].X
-            result = np.sum(matrix, axis=(0, 1))
-            demanda = round(sum(d.resource for d in self.maximum_demand.restrictions()), 1)
-            print(f"Demanda: {demanda} | Aceite ótimo: {model.objVal}\n")
-            for j, origin in enumerate(self.maximum_demand.loaded_origins):
-                for k, destination in enumerate(self.maximum_demand.loaded_destinations):
-                    travels = result[j, k]
-                    if travels:
-                        print(f"{origin}->{destination}: {travels} travels")
-
-            print("="*50)
+            result = RailroadResult(
+                optimization_result=matrix,
+                load_terminals=self.maximum_demand.loaded_origins,
+                unload_terminals=self.maximum_demand.loaded_destinations,
+                demand=self.demand,
+                transit_times=self.time_horizon.transit_matrix
+            )
+            return result
 
     def labels(self):
         # Building vars label
@@ -145,5 +207,16 @@ if __name__=='__main__':
         exchange_bands=[],
         time_horizon=90
     )
-    print(problem)
+    print(problem.complete_repr())
+    result = problem.optimize(max_time=60)
+    print(result.accpt_volume(verbose=False))
+
+    print("="*50)
+    print("Relatório de envio de vazios")
+    print(result.empty_offer())
+
+    print("Utilização de trem")
+    print(result.train_utilization(total_time=30))
+
+
 

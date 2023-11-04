@@ -20,7 +20,7 @@ class TimeHorizonRestriction(RailroadProblemTemplate, Restrictions):
     def __build_restrictions(self, transit_times: list[TransitTime], time_horizon: int) -> list[Restriction]:
         restrictions = []
         transit_matrix = self.__build_transit_matrix(transit_times=transit_times)
-
+        self.transit_matrix = transit_matrix
         for n in range(self.cardinality[0]):
             matrix = np.zeros(self.cardinality)
             for j in range(len(self.loaded_origins)):
