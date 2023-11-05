@@ -14,6 +14,8 @@ from optimizer.restrictions.demand_restriction import MaximumDemandRestriction, 
 from dataclasses import dataclass
 import pandas as pd
 
+pd.set_option("display.max_columns", 10)
+
 
 @dataclass
 class RailroadResult:
@@ -41,7 +43,9 @@ class RailroadResult:
                 "destination": demand.flow.destination,
                 "demand max": demand.maximum,
                 "demand minimum": demand.minimum,
-                "accept volume": flow_volume
+                "accept volume": flow_volume,
+                "travels": flow_travels,
+                "flow": f"{i}|{j}"
             })
         accept = pd.DataFrame(accept)
         return accept
