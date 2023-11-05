@@ -186,8 +186,8 @@ class RailroadOptimizationProblem:
 
 if __name__=='__main__':
     n1 = Node(name='terminal 1', capacity=50e3)
-    n2 = Node(name='terminal 2', capacity=600)
-    n3 = Node(name='terminal 3', capacity=600)
+    n2 = Node(name='terminal 2', capacity=600, initial_trains=1)
+    n3 = Node(name='terminal 3', capacity=600, initial_trains=1)
     f1 = Flow(
         origin=n1,
         destination=n2,
@@ -213,7 +213,7 @@ if __name__=='__main__':
         transit_times=transit_times,
         demands=demands,
         exchange_bands=[],
-        time_horizon=90
+        time_horizon=30
     )
     print(problem.complete_repr())
     result = problem.optimize(max_time=60)
@@ -222,7 +222,7 @@ if __name__=='__main__':
     print("="*50)
     print("Relatório de envio de vazios")
     print(result.empty_offer())
-
+    print("="*50)
     print("Utilização de trem")
     print(result.train_utilization(total_time=30))
 
