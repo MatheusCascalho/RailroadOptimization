@@ -9,6 +9,7 @@ from optimizer.restrictions.restrictions import Restrictions, RestrictionType, R
 from optimizer.restrictions.capacity_restriction import CapacityRestrictions
 from optimizer.restrictions.exchange_restriction import ExchangeRestriction
 from optimizer.restrictions.time_horizon_restriction import TimeHorizonRestriction
+from optimizer.restrictions.empty_offer_restriction import EmptyOfferRestriction
 from optimizer.restrictions.demand_restriction import MaximumDemandRestriction, MinimumDemandRestriction
 from dataclasses import dataclass
 import pandas as pd
@@ -97,6 +98,8 @@ class RailroadOptimizationProblem:
         )
         self.minimum_demand = MinimumDemandRestriction(trains=trains, demands=demands)
         self.maximum_demand = MaximumDemandRestriction(trains=trains, demands=demands)
+        self.empty_offer = EmptyOfferRestriction(trains=trains, flows=flows)
+
         self.costs = sum([r.coefficients for r in self.maximum_demand.restrictions()])
 
         self.geq_constraints = []
@@ -104,6 +107,7 @@ class RailroadOptimizationProblem:
         self.geq_constraints.extend(self.exchange.restrictions())
         self.geq_constraints.extend(self.time_horizon.restrictions())
         self.geq_constraints.extend(self.maximum_demand.restrictions())
+        self.geq_constraints.extend(self.empty_offer.restrictions())
 
         self.leq_constraints = []
         self.leq_constraints.extend(self.minimum_demand.restrictions())

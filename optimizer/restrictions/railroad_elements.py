@@ -11,10 +11,11 @@ def node_id_generator():
 class Node:
     __id_generator = node_id_generator()
 
-    def __init__(self, name: str, capacity: float):
+    def __init__(self, name: str, capacity: float, initial_trains: int = 0):
         self.name = name
         self.capacity = capacity
         self.identifier = next(self.__id_generator)
+        self.initial_trains = initial_trains
 
     def __repr__(self):
         return f"{self.identifier}-{self.name}"
