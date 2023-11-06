@@ -84,7 +84,6 @@ class RailroadOptimizationProblem:
             transit_times: list[TransitTime],
             exchange_bands: list[ExchangeBand],
             time_horizon: int,
-            max_time: int = 60
     ):
         # Building constraints
         self.demand = demands
@@ -115,7 +114,6 @@ class RailroadOptimizationProblem:
 
         self.leq_constraints = []
         self.leq_constraints.extend(self.minimum_demand.restrictions())
-
 
     def optimize(self, max_time):
         print(self)
