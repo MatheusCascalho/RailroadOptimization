@@ -34,7 +34,7 @@ class DispatchInitialTrain(RailroadProblemTemplate, Restrictions):
                     resource=1
                 )
                 restrictions.append(restriction)
-                already_counted_trains += 1
+            already_counted_trains += unload_point.initial_trains
         return restrictions
 
     def restrictions(self) -> list[Restriction]:
