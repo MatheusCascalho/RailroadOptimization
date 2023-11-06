@@ -183,9 +183,9 @@ class RailroadOptimizationProblem:
 
 
 if __name__=='__main__':
-    n1 = Node(name='terminal 1', capacity=50e3)
-    n2 = Node(name='terminal 2', capacity=600, initial_trains=1)
-    n3 = Node(name='terminal 3', capacity=600, initial_trains=1)
+    n1 = Node(name='terminal 1', capacity=500e3)
+    n2 = Node(name='terminal 2', capacity=500e3, initial_trains=1)
+    n3 = Node(name='terminal 3', capacity=500e3, initial_trains=1)
     f1 = Flow(
         origin=n1,
         destination=n2,
